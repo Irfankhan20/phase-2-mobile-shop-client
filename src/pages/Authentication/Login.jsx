@@ -1,7 +1,8 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import bgImg from "../../assets/images/login.jpg";
 import logo from "../../assets/images/logo.png";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { AuthContext } from "../../providers/AuthProvider";
 import toast from "react-hot-toast";
 const Login = () => {
@@ -10,6 +11,12 @@ const Login = () => {
   const from = location?.state || "/";
   // console.log(from)
   const { signIn, signInWithGoogle } = useContext(AuthContext);
+
+  // password show functionality
+  const [showPassword, setShowPassword] = useState(false);
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   // Google Signin
   const handleGoogleSignIn = async () => {
@@ -30,14 +37,13 @@ const Login = () => {
     const form = e.target;
     const email = form.email.value;
     const pass = form.password.value;
-    // console.log({ email, pass })
+
     try {
       //User Login
       await signIn(email, pass);
       toast.success("Signin Successful");
       navigate(from, { replace: true });
     } catch (err) {
-      // console.log(err)
       toast.error(err?.message);
     }
   };
@@ -127,13 +133,21 @@ const Login = () => {
                 </label>
               </div>
 
-              <input
-                id="loggingPassword"
-                autoComplete="current-password"
-                name="password"
-                className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg    focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
-                type="password"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Your Password"
+                  className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg    focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
+                  required
+                />
+                <span
+                  className="absolute top-2 right-3 text-xl cursor-pointer"
+                  onClick={handleShowPassword}
+                >
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </span>
+              </div>
             </div>
             <div className="mt-6">
               <button
