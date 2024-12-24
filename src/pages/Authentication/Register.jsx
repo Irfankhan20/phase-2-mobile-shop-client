@@ -1,30 +1,88 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import bgImg from "../../assets/images/register.jpg";
 import logo from "../../assets/images/logo.png";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 import toast from "react-hot-toast";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { UsePhoto } from "../../utilities/ImageHosting";
 
 const Registration = () => {
+  const location = useLocation();
   const navigate = useNavigate();
-  const { signInWithGoogle, createUser, updateUserProfile, setUser } =
+  const from = location.state?.from?.pathname || "/";
+  const { signInWithGoogle, createUser, updateUserProfile } =
     useContext(AuthContext);
+
+  // password show functionality
+  const [showPassword, setShowPassword] = useState(false);
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  // password validation
+  const [passwordError, setPasswordError] = useState("");
+  const validatePassword = (password) => {
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const isValidLength = password.length >= 8;
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (!hasUppercase) {
+      return "Password must include at least one uppercase letter.";
+    }
+    if (!hasLowercase) {
+      return "Password must include at least one lowercase letter.";
+    }
+    if (!isValidLength) {
+      return "Password must be at least 8 characters long.";
+    }
+    if (!hasNumber) {
+      return "Password must be include one number.";
+    }
+    if (!hasSpecialChar) {
+      return "Password must be include one special caracter.";
+    }
+    return null;
+  };
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     const form = e.target;
+    const userType = form.userType.value;
     const email = form.email.value;
     const name = form.name.value;
-    const photo = form.photo.value;
-    const pass = form.password.value;
-    console.log({ email, pass, name, photo });
+    const photo = form.photo.files[0];
+    const password = form.password.value;
+    console.log({ userType, email, password, name, photo });
+
+    // Validate password
+    const passwordValidationError = validatePassword(password);
+    if (passwordValidationError) {
+      setPasswordError(passwordValidationError);
+      return;
+    }
+    setPasswordError("");
+    const imageUrl = await UsePhoto(photo);
+
+    //create user with email & pass
+    createUser(email, password)
+      .then((result) => {
+        toast.success("login successful!");
+        console.log(result.user);
+        handleUpdateProfile(name, imageUrl);
+        form.reset();
+        navigate(from, { replace: true });
+      })
+      .catch((error) => console.log("ERROR", error.message));
+  };
+
+  // Google Signin
+  const handleGoogleSignIn = async () => {
     try {
-      //2. User Registration
-      const result = await createUser(email, pass);
-      console.log(result);
-      await updateUserProfile(name, photo);
-      setUser({ ...result.user, photoURL: photo, displayName: name });
-      toast.success("Signup Successful");
+      await signInWithGoogle();
+      toast.success("Signin Successful");
       navigate("/");
     } catch (err) {
       console.log(err);
@@ -32,17 +90,12 @@ const Registration = () => {
     }
   };
 
-  // Google Signin
-  const handleGoogleSignIn = async () => {
-    try {
-      await signInWithGoogle();
-
-      toast.success("Signin Successful");
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-      toast.error(err?.message);
-    }
+  // Update user profile
+  const handleUpdateProfile = (name, imageUrl) => {
+    const profile = { displayName: name, photoURL: imageUrl };
+    updateUserProfile(profile)
+      .then(() => {})
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -146,11 +199,9 @@ const Registration = () => {
                 Photo URL
               </label>
               <input
-                id="photo"
-                autoComplete="photo"
+                type="file"
                 name="photo"
-                className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg    focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
-                type="text"
+                className="file-input file-input-bordered file-input-info w-full"
               />
             </div>
             {/* email field  */}
@@ -180,13 +231,25 @@ const Registration = () => {
                 </label>
               </div>
 
-              <input
-                id="loggingPassword"
-                autoComplete="current-password"
-                name="password"
-                className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg    focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
-                type="password"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Your Password"
+                  className="block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg    focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
+                  required
+                />
+                <span
+                  className="absolute top-2 right-3 text-xl cursor-pointer"
+                  onClick={handleShowPassword}
+                >
+                  {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </span>
+              </div>
+              {/* Password Error Message */}
+              {passwordError && (
+                <p className="text-red-500 text-sm mt-2">{passwordError}</p>
+              )}
             </div>
             {/* sign up button  */}
             <div className="mt-6">
