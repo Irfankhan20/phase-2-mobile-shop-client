@@ -6,10 +6,13 @@ import { AuthContext } from "../../providers/AuthProvider";
 import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { UsePhoto } from "../../utilities/ImageHosting";
+import axios from "axios";
+// import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Registration = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  // const axiosPublic = useAxiosPublic();
   const from = location.state?.from?.pathname || "/";
   const { signInWithGoogle, createUser, updateUserProfile } =
     useContext(AuthContext);
@@ -68,12 +71,25 @@ const Registration = () => {
 
     //create user with email & pass
     createUser(email, password)
-      .then((result) => {
-        toast.success("login successful!");
+      .then(async (result) => {
         console.log(result.user);
+
         handleUpdateProfile(name, imageUrl);
-        form.reset();
-        navigate(from, { replace: true });
+
+        const userInfo = {
+          name: name,
+          email: email,
+          userType: userType,
+          photo: imageUrl,
+        };
+
+        await axios.post("http://localhost:5000/user", userInfo).then((res) => {
+          if (res.data.insertedId) {
+            form.reset();
+            toast.success("Registration Successful");
+            navigate(from, { replace: true });
+          }
+        });
       })
       .catch((error) => console.log("ERROR", error.message));
   };
@@ -90,7 +106,6 @@ const Registration = () => {
     }
   };
 
-  // Update user profile
   const handleUpdateProfile = (name, imageUrl) => {
     const profile = { displayName: name, photoURL: imageUrl };
     updateUserProfile(profile)

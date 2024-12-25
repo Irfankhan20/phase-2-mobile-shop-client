@@ -1,20 +1,17 @@
-import { createBrowserRouter } from 'react-router-dom'
-import Main from '../layouts/Main'
-import Home from '../pages/Home'
-import Login from '../pages/Authentication/Login'
-import Register from '../pages/Authentication/Register'
-import JobDetails from '../pages/JobDetails'
-import AddJob from '../pages/AddJob'
-import ErrorPage from '../pages/ErrorPage'
-import MyPostedJobs from '../pages/MyPostedJobs'
-import UpdateJob from '../pages/UpdateJob'
-import PrivateRoute from './PrivateRoute'
-import MyBids from '../pages/MyBids'
-import BidRequests from '../pages/BidRequests'
-import AllJobs from '../pages/AllJobs'
+import { createBrowserRouter } from "react-router-dom";
+import Main from "../layouts/Main";
+import Login from "../pages/Authentication/Login";
+import Register from "../pages/Authentication/Register";
+import ErrorPage from "../pages/errorPage/ErrorPage";
+import Products from "../pages/products/Products";
+import About from "../pages/about/About";
+import Contact from "../pages/contact/Contact";
+import Home from "../pages/home/Home";
+import Profile from "../pages/profile/Profile";
+import PrivateRoute from "./PrivateRoute";
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Main />,
     errorElement: <ErrorPage />,
     children: [
@@ -23,67 +20,35 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/jobs',
-        element: <AllJobs />,
+        path: "/products",
+        element: <Products />,
       },
       {
-        path: '/login',
+        path: "/profile",
+        element: (
+          <PrivateRoute>
+            <Profile />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/login",
         element: <Login />,
       },
       {
-        path: '/registration',
+        path: "/registration",
         element: <Register />,
       },
       {
-        path: '/job/:id',
-        element: (
-          <PrivateRoute>
-            <JobDetails />
-          </PrivateRoute>
-        ),
+        path: "/about",
+        element: <About />,
       },
       {
-        path: '/update/:id',
-        element: (
-          <PrivateRoute>
-            <UpdateJob />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: '/add-job',
-        element: (
-          <PrivateRoute>
-            <AddJob />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: '/my-bids',
-        element: (
-          <PrivateRoute>
-            <MyBids />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: '/my-posted-jobs',
-        element: (
-          <PrivateRoute>
-            <MyPostedJobs />
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: '/bid-requests',
-        element: (
-          <PrivateRoute>
-            <BidRequests />
-          </PrivateRoute>
-        ),
+        path: "/contact",
+        element: <Contact />,
       },
     ],
   },
-])
+]);
 
-export default router
+export default router;
