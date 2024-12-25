@@ -3,7 +3,7 @@ import TabCategories from "../../components/TabCategories";
 
 const Home = () => {
   return (
-    <div>
+    <div className="lg:pt-16">
       <Carousel />
       <TabCategories />
     </div>

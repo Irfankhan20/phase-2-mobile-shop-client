@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { AuthContext } from "../../providers/AuthProvider";
 import toast from "react-hot-toast";
+import axios from "axios";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,9 +22,18 @@ const Login = () => {
   // Google Signin
   const handleGoogleSignIn = async () => {
     try {
-      await signInWithGoogle();
+      const result = await signInWithGoogle();
+      const userInfo = {
+        email: result.user?.email,
+        name: result.user?.displayName,
+        photo: result.user?.photoURL,
+        userType: "Buyer",
+      };
+      await axios.post("http://localhost:5000/user", userInfo).then((res) => {
+        console.log(res);
+        toast.success("Signin Successful");
+      });
 
-      toast.success("Signin Successful");
       navigate(from, { replace: true });
     } catch (err) {
       // console.log(err)
@@ -49,7 +59,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-[calc(100vh-306px)] my-12">
+    <div className="flex pt-28 justify-center items-center min-h-[calc(100vh-306px)] ">
       <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg  lg:max-w-4xl ">
         <div
           className="hidden bg-cover bg-center lg:block lg:w-1/2"

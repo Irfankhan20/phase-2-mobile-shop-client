@@ -53,12 +53,12 @@ const Registration = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const userType = form.userType.value;
+
     const email = form.email.value;
     const name = form.name.value;
     const photo = form.photo.files[0];
     const password = form.password.value;
-    console.log({ userType, email, password, name, photo });
+    console.log({ email, password, name, photo });
 
     // Validate password
     const passwordValidationError = validatePassword(password);
@@ -79,7 +79,7 @@ const Registration = () => {
         const userInfo = {
           name: name,
           email: email,
-          userType: userType,
+          userType: "Buyer",
           photo: imageUrl,
         };
 
@@ -91,18 +91,31 @@ const Registration = () => {
           }
         });
       })
-      .catch((error) => console.log("ERROR", error.message));
+      .catch((error) => {
+        toast.error("something went wrong during registration");
+        console.log("ERROR", error.message);
+      });
   };
 
-  // Google Signin
   const handleGoogleSignIn = async () => {
     try {
-      await signInWithGoogle();
-      toast.success("Signin Successful");
-      navigate("/");
+      const result = await signInWithGoogle();
+      const userInfo = {
+        email: result.user?.email,
+        name: result.user?.displayName,
+        photo: result.user?.photoURL,
+        userType: "Buyer",
+      };
+
+      await axios.post("http://localhost:5000/user", userInfo).then((res) => {
+        if (res.data.insertedId) {
+          toast.success("Google Sign-In Registration Successful");
+          navigate(from, { replace: true });
+        }
+      });
     } catch (err) {
-      console.log(err);
-      toast.error(err?.message);
+      console.error(err);
+      toast.error(err?.message || "Google Sign-In failed");
     }
   };
 
@@ -114,7 +127,7 @@ const Registration = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-[calc(100vh-306px)] my-12">
+    <div className="flex justify-center items-center min-h-[calc(100vh-306px)] pt-28">
       <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg  lg:max-w-4xl ">
         <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
           {/* logo part  */}
@@ -170,25 +183,6 @@ const Registration = () => {
 
           {/* register form  */}
           <form onSubmit={handleSignUp}>
-            {/* usertype field  */}
-            <div className="mt-4">
-              <label
-                className="block mb-2 text-sm font-medium text-gray-600 "
-                htmlFor="name"
-              >
-                User Type
-              </label>
-              <select
-                name="userType"
-                defaultValue="Select User Type"
-                className="select select-bordered block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg    focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300"
-              >
-                <option disabled>Select User Type</option>
-                <option>Buyer</option>
-                <option>Seller</option>
-                <option>Admin</option>
-              </select>
-            </div>
             {/* username field  */}
             <div className="mt-4">
               <label
