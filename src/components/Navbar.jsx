@@ -26,7 +26,7 @@ const Navbar = () => {
     </>
   );
   return (
-    <div className="navbar fixed backdrop-blur-xl bg-white/30 shadow-sm px-4 mx-auto z-50">
+    <div className="navbar fixed backdrop-blur-xl bg-white/30 shadow-sm px-4 mx-auto z-50 ">
       {/* navbar start  */}
       <div className="navbar-start">
         <Link to={"/"} className=" flex gap-2 items-center">

@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import bgImg from "../../assets/images/register.jpg";
+import bgImg from "../../assets/images/login2.png";
 import logo from "../../assets/images/logo.png";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
@@ -129,7 +129,7 @@ const Registration = () => {
   return (
     <div className="flex justify-center items-center min-h-[calc(100vh-306px)] pt-28">
       <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg  lg:max-w-4xl ">
-        <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
+        <div className="w-full border shadow-xl px-6 py-8 md:px-8 lg:w-1/2">
           {/* logo part  */}
           <div className="flex justify-center mx-auto">
             <img className="w-auto h-7 sm:h-8" src={logo} alt="" />

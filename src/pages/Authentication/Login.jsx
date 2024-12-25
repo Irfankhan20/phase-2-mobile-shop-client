@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import bgImg from "../../assets/images/login.jpg";
+import bgImg from "../../assets/images/login2.png";
 import logo from "../../assets/images/logo.png";
 import { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
@@ -60,15 +60,17 @@ const Login = () => {
 
   return (
     <div className="flex pt-28 justify-center items-center min-h-[calc(100vh-306px)] ">
-      <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg  lg:max-w-4xl ">
+      <div className="flex w-full border shadow-xl rounded-xl max-w-sm mx-auto  bg-white   lg:max-w-4xl ">
+        {/* backgroundImage  */}
         <div
-          className="hidden bg-cover bg-center lg:block lg:w-1/2"
+          className="rounded-l-xl bg-cover bg-center  lg:w-1/2"
           style={{
             backgroundImage: `url(${bgImg})`,
           }}
         ></div>
 
-        <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
+        <div className="w-full  px-6 py-8 md:px-8 lg:w-1/2">
+          {/* logo top  */}
           <div className="flex justify-center mx-auto">
             <img className="w-auto h-7 sm:h-8" src={logo} alt="" />
           </div>
@@ -77,6 +79,7 @@ const Login = () => {
             Welcome back!
           </p>
 
+          {/* google login  */}
           <div
             onClick={handleGoogleSignIn}
             className="flex cursor-pointer items-center justify-center mt-4 text-gray-600 transition-colors duration-300 transform border rounded-lg   hover:bg-gray-50 "
@@ -107,6 +110,7 @@ const Login = () => {
             </span>
           </div>
 
+          {/* login with likha  */}
           <div className="flex items-center justify-between mt-4">
             <span className="w-1/5 border-b  lg:w-1/4"></span>
 
@@ -116,7 +120,9 @@ const Login = () => {
 
             <span className="w-1/5 border-b dark:border-gray-400 lg:w-1/4"></span>
           </div>
+
           <form onSubmit={handleSignIn}>
+            {/* email field  */}
             <div className="mt-4">
               <label
                 className="block mb-2 text-sm font-medium text-gray-600 "
@@ -133,6 +139,7 @@ const Login = () => {
               />
             </div>
 
+            {/* password field  */}
             <div className="mt-4">
               <div className="flex justify-between">
                 <label
@@ -159,6 +166,8 @@ const Login = () => {
                 </span>
               </div>
             </div>
+
+            {/* sign in button  */}
             <div className="mt-6">
               <button
                 type="submit"
@@ -169,6 +178,7 @@ const Login = () => {
             </div>
           </form>
 
+          {/* redirect register page  */}
           <div className="flex items-center justify-between mt-4">
             <span className="w-1/5 border-b  md:w-1/4"></span>
 
