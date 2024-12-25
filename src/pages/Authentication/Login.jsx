@@ -1,11 +1,12 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import bgImg from "../../assets/images/login2.png";
 import logo from "../../assets/images/logo.png";
 import { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { AuthContext } from "../../providers/AuthProvider";
 import toast from "react-hot-toast";
 import axios from "axios";
+import loginLottiData from "../../assets/lotties/loginLottie.json";
+import Lottie from "lottie-react";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -64,10 +65,13 @@ const Login = () => {
         {/* backgroundImage  */}
         <div
           className="rounded-l-xl bg-cover bg-center  lg:w-1/2"
-          style={{
-            backgroundImage: `url(${bgImg})`,
-          }}
-        ></div>
+          // style={{
+          //   backgroundImage: `url(${bgImg})`,
+          // }}
+        >
+          {" "}
+          <Lottie animationData={loginLottiData}></Lottie>
+        </div>
 
         <div className="w-full  px-6 py-8 md:px-8 lg:w-1/2">
           {/* logo top  */}

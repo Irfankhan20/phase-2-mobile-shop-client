@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import bgImg from "../../assets/images/login2.png";
+// import bgImg from "../../assets/images/login2.png";
 import logo from "../../assets/images/logo.png";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
@@ -7,7 +7,8 @@ import toast from "react-hot-toast";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { UsePhoto } from "../../utilities/ImageHosting";
 import axios from "axios";
-// import useAxiosPublic from "../../hooks/useAxiosPublic";
+import Lottie from "lottie-react";
+import loginLottiData from "../../assets/lotties/register.json";
 
 const Registration = () => {
   const location = useLocation();
@@ -128,7 +129,7 @@ const Registration = () => {
 
   return (
     <div className="flex justify-center items-center min-h-[calc(100vh-306px)] pt-28">
-      <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg  lg:max-w-4xl ">
+      <div className="flex items-center w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg  lg:max-w-4xl ">
         <div className="w-full border shadow-xl px-6 py-8 md:px-8 lg:w-1/2">
           {/* logo part  */}
           <div className="flex justify-center mx-auto">
@@ -287,12 +288,9 @@ const Registration = () => {
         </div>
 
         {/* backgroundImage  */}
-        <div
-          className="hidden bg-cover bg-center lg:block lg:w-1/2"
-          style={{
-            backgroundImage: `url(${bgImg})`,
-          }}
-        ></div>
+        <div className="hidden bg-cover bg-center  lg:block lg:w-1/2">
+          <Lottie animationData={loginLottiData}></Lottie>
+        </div>
       </div>
     </div>
   );
